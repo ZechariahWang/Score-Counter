@@ -65,14 +65,14 @@ export default function TeamCard({
 
       {/* Control Buttons */}
       <div className="flex gap-1.5 justify-center">
-        <button
+        {/* <button
           onClick={onDecrement}
           disabled={disabled || score === 0}
           className={`flex-1 min-w-0 px-2 py-2 rounded-lg text-white text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${colors.button}`}
           aria-label={`Decrement ${team} score`}
         >
           -{incrementAmount}
-        </button>
+        </button> */}
         <button
           onClick={onIncrement}
           disabled={disabled}
@@ -87,7 +87,7 @@ export default function TeamCard({
           className="flex-1 min-w-0 px-2 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium transition-colors hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
           aria-label={`Reset ${team} score`}
         >
-          R
+          Reset
         </button>
       </div>
     </div>

@@ -133,14 +133,6 @@ BEGIN
     -- Validate and clamp amount (1-100)
     v_amount := GREATEST(1, LEAST(p_amount, 100));
 
-    -- Check rate limit
-    IF check_rate_limit(p_client_id) THEN
-        RETURN json_build_object(
-            'success', false,
-            'error', 'Rate limited. Please wait a few seconds.'
-        );
-    END IF;
-
     -- Lock the row and get current score
     SELECT score INTO v_prev_score
     FROM scores
@@ -193,14 +185,6 @@ DECLARE
 BEGIN
     -- Validate and clamp amount (1-100)
     v_amount := GREATEST(1, LEAST(p_amount, 100));
-
-    -- Check rate limit
-    IF check_rate_limit(p_client_id) THEN
-        RETURN json_build_object(
-            'success', false,
-            'error', 'Rate limited. Please wait a few seconds.'
-        );
-    END IF;
 
     -- Lock the row and get current score
     SELECT score INTO v_prev_score
@@ -259,14 +243,6 @@ DECLARE
     v_prev_score INTEGER;
     v_action_id UUID;
 BEGIN
-    -- Check rate limit
-    IF check_rate_limit(p_client_id) THEN
-        RETURN json_build_object(
-            'success', false,
-            'error', 'Rate limited. Please wait a few seconds.'
-        );
-    END IF;
-
     -- Lock the row and get current score
     SELECT score INTO v_prev_score
     FROM scores
@@ -321,14 +297,6 @@ DECLARE
     v_team RECORD;
     v_actions_created INTEGER := 0;
 BEGIN
-    -- Check rate limit
-    IF check_rate_limit(p_client_id) THEN
-        RETURN json_build_object(
-            'success', false,
-            'error', 'Rate limited. Please wait a few seconds.'
-        );
-    END IF;
-
     -- Loop through all teams with non-zero scores
     FOR v_team IN
         SELECT team, score
@@ -370,14 +338,6 @@ DECLARE
     v_undo_window INTERVAL := '60 seconds';
     v_undo_action_id UUID;
 BEGIN
-    -- Check rate limit
-    IF check_rate_limit(p_client_id) THEN
-        RETURN json_build_object(
-            'success', false,
-            'error', 'Rate limited. Please wait a few seconds.'
-        );
-    END IF;
-
     -- Find the most recent undoable action by this client
     SELECT id, team, delta, prev_score, new_score, created_at
     INTO v_action

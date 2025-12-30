@@ -75,6 +75,7 @@ export default function Home() {
         { event: '*', schema: 'public', table: 'scores' },
         (payload) => {
           // Update scores from realtime event (server is source of truth)
+          console.log('Realtime scores update:', payload);
           const newData = payload.new as Score | null;
           if (newData && newData.team && typeof newData.score === 'number') {
             setScores((prev) => ({
@@ -84,7 +85,9 @@ export default function Home() {
           }
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log('Scores channel status:', status);
+      });
 
     // Subscribe to actions changes for history
     const actionsChannel = supabase
@@ -124,13 +127,16 @@ export default function Home() {
   // RPC call helper with error handling
   const callRpc = useCallback(
     async (funcName: string, params: Record<string, string | number>) => {
+      console.log('Calling RPC:', funcName, params);
       const { data, error } = await supabase.rpc(funcName, params);
 
       if (error) {
+        console.error('RPC error:', error);
         showToast(error.message, 'error');
         return null;
       }
 
+      console.log('RPC response:', data);
       const response = data as RpcResponse;
       if (!response.success) {
         showToast(response.error || 'Operation failed', 'error');
